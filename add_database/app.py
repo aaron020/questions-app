@@ -1,6 +1,7 @@
 import json
 import boto3
 from botocore.exceptions import ClientError
+from common_layer import Car
 
 client = boto3.client('dynamodb')
 dynamodb = boto3.resource('dynamodb')
@@ -10,6 +11,7 @@ tableName = 'questions'
 
 def lambda_handler(event, context):
     print(event)
+    print(Car().myCar())
     body: dict = json.loads(event.get('body'))
     
     headers = {
@@ -40,7 +42,7 @@ def lambda_handler(event, context):
             return {
                 'statusCode': 400,
                 'headers':headers,
-                'body': 'Id already exists'
+                'body': 'The question_id specified already exists'
             } 
     
 

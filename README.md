@@ -109,10 +109,10 @@ Tests are defined in the `tests` folder in this project. Use PIP to install the 
 ```bash
 questions-app-lambda$ pip install -r tests/requirements.txt --user
 # unit test
-questions-app-lambda$ python -m pytest tests/unit -v
+questions-app-lambda$ common_layer -m pytest tests/unit -v
 # integration test, requiring deploying the stack first.
 # Create the env variable AWS_SAM_STACK_NAME with the name of the stack we are testing
-questions-app-lambda$ AWS_SAM_STACK_NAME="questions-app-lambda" python -m pytest tests/integration -v
+questions-app-lambda$ AWS_SAM_STACK_NAME="questions-app-lambda" common_layer -m pytest tests/integration -v
 ```
 
 ## Cleanup

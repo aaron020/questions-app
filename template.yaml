@@ -58,6 +58,8 @@ Resources:
       CodeUri: get_database/
       Handler: app.lambda_handler
       Runtime: python3.9
+      Layers:
+        - !Ref CommonLayer
       Architectures:
       - x86_64
       Role: !GetAtt LambdaExecutionRole.Arn
@@ -82,6 +84,8 @@ Resources:
        CodeUri: add_database/
        Handler: app.lambda_handler
        Runtime: python3.9
+       Layers:
+         - !Ref CommonLayer
        Architectures:
        - x86_64
        Role: !GetAtt LambdaExecutionRole.Arn
@@ -98,6 +102,15 @@ Resources:
       FunctionName: !Ref AddDatabaseFunction
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
+
+  CommonLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: python
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9
 
   QuestionsGateway:
     Type: AWS::Serverless::Api
