@@ -2,6 +2,7 @@ import json
 import boto3
 from botocore.exceptions import ClientError
 from common_layer import Car
+from common_layer.api_requests_helper import get_response_headers_cors, StatusCodes, Response
 
 client = boto3.client('dynamodb')
 dynamodb = boto3.resource('dynamodb')
@@ -14,12 +15,7 @@ def lambda_handler(event, context):
     print(Car().myCar())
     body: dict = json.loads(event.get('body'))
     
-    headers = {
-        'Access-Control-Allow-Origin': '*',  
-        'Access-Control-Allow-Methods': 'OPTIONS,POST',  
-        'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token',  
-        'Content-Type': 'application/json'
-    }
+    headers = get_response_headers_cors(allow_methods=['OPTIONS','POST'])
     try:
         response: dict = table.put_item(
             Item=body,
@@ -27,23 +23,11 @@ def lambda_handler(event, context):
         )
         response_code: int = response.get('ResponseMetadata').get('HTTPStatusCode')
         if response_code == 200:    
-            return {
-                'statusCode': 200,
-                'headers':headers,
-                'body': 'Succesfully added to database'
-            }
+            return Response(StatusCodes.STATUS_OK, headers, 'Successfully added to database').build_response()
         else:
-            return {
-                'statusCode': response_code,
-                'headers':headers,
-                'body': 'Problem adding to database'
-            }
+            return Response(StatusCodes.STATUS_CLIENT_ERROR, headers, 'Issue adding to database').build_response()
     except ClientError as e:
-            return {
-                'statusCode': 400,
-                'headers':headers,
-                'body': 'The question_id specified already exists'
-            } 
+            return Response(StatusCodes.STATUS_SERVER_ERROR, headers, f'Question Id taken: {e}').build_response()
     
 
     
