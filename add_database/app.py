@@ -1,7 +1,6 @@
 import json
 import boto3
 from botocore.exceptions import ClientError
-from common_layer import Car
 from common_layer.api_requests_helper import get_response_headers_cors, StatusCodes, Response
 
 client = boto3.client('dynamodb')
@@ -11,8 +10,6 @@ tableName = 'questions'
 
 
 def lambda_handler(event, context):
-    print(event)
-    print(Car().myCar())
     body: dict = json.loads(event.get('body'))
     
     headers = get_response_headers_cors(allow_methods=['OPTIONS','POST'])
