@@ -140,6 +140,22 @@ Resources:
                   description: Successful response from Lambda function
       EndpointConfiguration: REGIONAL
 
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      TableName: topic_questions
+      AttributeDefinitions:
+        - AttributeName: comp_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: comp_id
+          KeyType: HASH
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:

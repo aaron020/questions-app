@@ -1,1 +1,2 @@
 from .custom_exceptions import InvalidLambdaInputException
+from .custom_exceptions import DatabaseFailedToAddExeception
