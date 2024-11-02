@@ -35,8 +35,3 @@ class ValidateInput:
         if len(extracted_question.get('answers')) > 5:
             raise InvalidLambdaInputException(f'answers cannot be more than 5')
 
-        for answer in extracted_question.get('answers'):
-            if len(answer) != 2:
-                raise InvalidLambdaInputException(f'answer must have answer text and correct boolean')
-            if type(answer[0]) != str and type(answer[1]) != bool:
-                raise InvalidLambdaInputException(f'answer must have answer text and correct boolean')

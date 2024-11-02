@@ -1,14 +1,21 @@
 from dataclasses import dataclass, field, asdict
-from typing import List, Tuple, Optional
+from typing import List, Optional, Dict
+
 
 @dataclass
 class Question:
     comp_id: Optional[str] = None
     question: Optional[str] = None
-    answers: Optional[List[Tuple[str, bool]]] = field(default_factory=list)
+    answers: Optional[List[Dict[str,bool]]] = field(default_factory=list)
     explanation: Optional[str] = None
     difficulty: Optional[int] = None
     random: Optional[int] = None
 
-    def to_dict(self) -> dict:
-        return asdict(self)
+    def prepare_for_database(self) -> dict:
+        question_for_database = {'comp_id': self.comp_id, 'question': self.question, 'explanation': self.explanation,
+                                 'difficulty': self.difficulty, 'random': self.random}
+        for answer_index in range(len(self.answers)):
+            question_for_database[f'answer_{answer_index}'] = self.answers[answer_index]
+        return question_for_database
+
+

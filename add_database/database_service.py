@@ -10,13 +10,13 @@ from common_layer.exceptions import DatabaseFailedToAddExeception
 class DatabaseService:
 
     def __init__(self, input_question: dict, database_table):
-        self.database_question: Question = self.convert_to_database_question(input_question)
+        self.database_question: dict = self.convert_to_database_question(input_question)
         self.database_table = database_table
 
     def add_to_database(self):
         try:
             response: dict = self.database_table.put_item(
-                Item=self.database_question.to_dict(),
+                Item=self.database_question,
                 ConditionExpression='attribute_not_exists(comp_id)'
             )
             response_code: int = response.get('ResponseMetadata').get('HTTPStatusCode')
@@ -27,10 +27,10 @@ class DatabaseService:
 
 
     @staticmethod
-    def convert_to_database_question(input_question: dict) -> Question:
+    def convert_to_database_question(input_question: dict) -> dict:
         comp_id: str = input_question.get('topic') + '-' + str(uuid.uuid4())
         random_num: int = random.randint(1, 1000)
         return Question(comp_id, input_question.get('question'),input_question.get('answers'),
                                           input_question.get('explanation'), input_question.get('difficulty'),
-                                          random_num)
+                                          random_num).prepare_for_database()
 
