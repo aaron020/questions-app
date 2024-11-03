@@ -91,7 +91,7 @@ Resources:
        Role: !GetAtt LambdaExecutionRole.Arn
        Events:
         HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api
           Properties:
             Path: /add
             Method: get
@@ -100,6 +100,32 @@ Resources:
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !Ref AddDatabaseFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
+
+  OptionsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: options-function
+      CodeUri: options_function/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Layers:
+        - !Ref CommonLayer
+      Architectures:
+        - x86_64
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /options
+            Method: options
+  MyApiGatewayLambdaPermissionOptionsFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref OptionsFunction
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
 
@@ -122,6 +148,14 @@ Resources:
         info: {}
         paths:
           /question:
+            options:
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${OptionsFunction.Arn}/invocations
+              responses:
+                '200':
+                  description: Successful response for CORS preflight
             get:
               x-amazon-apigateway-integration:
                 type: aws_proxy  
@@ -143,6 +177,7 @@ Resources:
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       TableName: topic_questions
       AttributeDefinitions:
