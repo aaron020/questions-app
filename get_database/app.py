@@ -2,35 +2,31 @@ import json
 import boto3
 from decimal import Decimal
 
+from common_layer.api_requests_helper import get_response_headers_cors, Response, StatusCodes
+from common_layer.exceptions import InvalidLambdaInputException
+from common_layer.exceptions import DatabaseFailedToPutExeception, DatabaseNoContentException
+from database_service import DatabaseService
+from validate_input import ValidateInput
+
 client = boto3.client('dynamodb')
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('questions')
+table = dynamodb.Table('topic_questions')
 tableName = 'questions'
 
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Decimal):
-            return float(obj)
-        return super(DecimalEncoder, self).default(obj)
-        
 
 def lambda_handler(event, context):
-    print(f'lambda recieved: {event}')
-        # Define the CORS headers
-    headers = {
-        'Access-Control-Allow-Origin': '*',  
-        'Access-Control-Allow-Methods': 'OPTIONS,GET',  
-        'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token',  
-        'Content-Type': 'application/json'
-    }
-    
-    body: dict = event.get('queryStringParameters')
-    question_id = body.get('question_id') 
-        
-    found_item = table.get_item(Key={'question_id': question_id})['Item']
-    
-    return {
-        'statusCode': 200,
-        'headers': headers,
-        'body': json.dumps(found_item, cls=DecimalEncoder)
-    }
+    headers = get_response_headers_cors(allow_methods=['GET'])
+    try:
+        topic: str = ValidateInput(event).extract_input()
+        questions: list = DatabaseService(topic, table).get_from_database()
+        return Response(StatusCodes.STATUS_OK, headers, questions).build_response()
+    except InvalidLambdaInputException as e:
+        return Response(StatusCodes.STATUS_CLIENT_ERROR, headers, str(e)).build_response()
+    except DatabaseFailedToPutExeception as e:
+        return Response(StatusCodes.STATUS_SERVER_ERROR, headers, str(e)).build_response()
+    except DatabaseNoContentException as e:
+        return Response(StatusCodes.STATUS_NO_CONTENT, headers, str(e)).build_response()
+    except Exception as e:
+        return Response(StatusCodes.STATUS_SERVER_ERROR, headers, str(e)).build_response()
+
+

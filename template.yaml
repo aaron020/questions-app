@@ -183,13 +183,29 @@ Resources:
       AttributeDefinitions:
         - AttributeName: comp_id
           AttributeType: S
+        - AttributeName: topic
+          AttributeType: S
       KeySchema:
         - AttributeName: comp_id
           KeyType: HASH
+        - AttributeName: topic
+          KeyType: RANGE
       BillingMode: PROVISIONED
       ProvisionedThroughput:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
+      GlobalSecondaryIndexes:
+        - IndexName: TopicIndex
+          KeySchema:
+            - AttributeName: topic
+              KeyType: HASH
+            - AttributeName: comp_id
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 2
+            WriteCapacityUnits: 2
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group

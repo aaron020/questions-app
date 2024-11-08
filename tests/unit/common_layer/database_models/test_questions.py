@@ -5,12 +5,13 @@ class TestQuestions:
 
 
     def test_prepare_for_database(self):
-        question: Question = Question('mock_comp_id', 'mock_question', [{'mock_answer':False}, {'mock_answer':True}],
+        question: Question = Question('mock_comp_id','mock_topic', 'mock_question', [{'mock_answer':False}, {'mock_answer':True}],
                                       'mock_explanation', 2, 6)
 
         question_for_database: dict = question.prepare_for_database()
 
         assert question_for_database.get('comp_id') == 'mock_comp_id'
+        assert question_for_database.get('topic') == 'mock_topic'
         assert question_for_database.get('question') == 'mock_question'
         assert question_for_database.get('answer_0') == {'mock_answer':False}
         assert question_for_database.get('answer_1') == {'mock_answer':True}

@@ -4,7 +4,7 @@ import random
 from botocore.exceptions import ClientError
 
 from common_layer.database_models import Question
-from common_layer.exceptions import DatabaseFailedToAddExeception
+from common_layer.exceptions import DatabaseFailedToPutExeception
 
 
 class DatabaseService:
@@ -21,16 +21,16 @@ class DatabaseService:
             )
             response_code: int = response.get('ResponseMetadata').get('HTTPStatusCode')
             if response_code != 200:
-                raise DatabaseFailedToAddExeception(f'Unable to add to database, response code: {response_code}')
+                raise DatabaseFailedToPutExeception(f'Unable to add to database, response code: {response_code}')
         except ClientError as e:
-            raise DatabaseFailedToAddExeception(f'Unable to add to database, {e}')
+            raise DatabaseFailedToPutExeception(f'Unable to add to database, {e}')
 
 
     @staticmethod
     def convert_to_database_question(input_question: dict) -> dict:
-        comp_id: str = input_question.get('topic') + '-' + str(uuid.uuid4())
+        comp_id: str =  str(uuid.uuid4())
         random_num: int = random.randint(1, 1000)
-        return Question(comp_id, input_question.get('question'),input_question.get('answers'),
+        return Question(comp_id,input_question.get('topic'), input_question.get('question'),input_question.get('answers'),
                                           input_question.get('explanation'), input_question.get('difficulty'),
                                           random_num).prepare_for_database()
 

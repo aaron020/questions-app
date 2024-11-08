@@ -14,7 +14,7 @@ class TestDatabaseService:
 
         database_question: dict = DatabaseService(input_question, None).convert_to_database_question(input_question)
 
-        assert database_question.get('comp_id').startswith('aws')
+        assert database_question.get('topic') == 'aws'
         assert database_question.get('question') == 'What is the default and max retention period for messages in a queue?'
         assert database_question.get('answer_0') ==  {'4 days default, 10 days max': False}
         assert database_question.get('answer_1') == {'4 days default, 10 days max': True}

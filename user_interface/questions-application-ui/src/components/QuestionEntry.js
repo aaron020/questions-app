@@ -46,7 +46,7 @@ export const QuestionEntry = () => {
 
         console.log(payload);
 
-        fetch('https://z1rbxkydt4.execute-api.eu-west-1.amazonaws.com/Prod/question', {
+        fetch('https://n12kvagztk.execute-api.eu-west-1.amazonaws.com/Prod/question', {
             method: 'POST',
             headers: {"content-type": "application/json", "x-amz-docs-region": "eu-west-1"},
             mode: 'cors',
