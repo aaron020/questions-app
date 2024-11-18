@@ -6,7 +6,7 @@ class ValidateInput:
     def __init__(self, event: dict):
         self.event = event
         
-    def extract_input(self):
+    def extract_input(self) -> str:
         if QUERY_STRING_PARAMETERS in self.event:
             query_string: dict = self.event.get(QUERY_STRING_PARAMETERS)
             if TOPIC in query_string and query_string.get(TOPIC) != '':

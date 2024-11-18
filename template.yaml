@@ -103,6 +103,32 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
 
+  DeleteFromDatabaseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: questions-delete-question-from-database
+      CodeUri: delete_from_database/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Layers:
+        - !Ref CommonLayer
+      Architectures:
+        - x86_64
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /delete
+            Method: get
+  MyApiGatewayLambdaPermissionDeleteFromDatabaseFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref DeleteFromDatabaseFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
+
   OptionsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -143,6 +169,12 @@ Resources:
     Properties:
       Name: QuestionsGateway
       StageName: Prod
+      Auth:
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt CognitoUserPool.Arn
+            Identity:
+              Header: Authorization
       DefinitionBody:
         openapi: '3.0'
         info: {}
@@ -172,6 +204,16 @@ Resources:
               responses:
                 '200':
                   description: Successful response from Lambda function
+            delete:
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteFromDatabaseFunction.Arn}/invocations
+              responses:
+                '200':
+                  description: Successful response from Lambda function
+              security:
+                - CognitoAuthorizer: []
       EndpointConfiguration: REGIONAL
 
   DynamoDBTable:
@@ -206,6 +248,45 @@ Resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 2
             WriteCapacityUnits: 2
+
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: 'dead-user-pool'
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+      UsernameConfiguration:
+        CaseSensitive: false
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          RequireUppercase: true
+      MfaConfiguration: 'OFF'
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+  CognitoUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: 'dead-user-pool-auth'
+      UserPoolId: !Ref CognitoUserPool
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref CognitoUserPool
+      ClientName: 'dead-app-client'
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+        - ALLOW_USER_PASSWORD_AUTH
+      PreventUserExistenceErrors: ENABLED
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
