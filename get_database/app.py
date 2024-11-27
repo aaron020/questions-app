@@ -3,8 +3,7 @@ import boto3
 from decimal import Decimal
 
 from common_layer.api_requests_helper import get_response_headers_cors, Response, StatusCodes
-from common_layer.exceptions import InvalidLambdaInputException
-from common_layer.exceptions import DatabaseFailedToPutExeception, DatabaseNoContentException
+from common_layer.exceptions import InvalidLambdaInputException, DatabaseFailedToPutExeception, DatabaseNoContentException
 from database_service import DatabaseService
 from validate_input import ValidateInput
 

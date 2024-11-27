@@ -1,6 +1,6 @@
 from boto3.dynamodb.conditions import Key
 
-from common_layer.exceptions.custom_exceptions import DatabaseFailedToQueryExeception, DatabaseNoContentException
+from common_layer.exceptions import DatabaseFailedToQueryExeception, DatabaseNoContentException
 
 
 class DatabaseService:
