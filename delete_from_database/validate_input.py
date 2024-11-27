@@ -21,13 +21,9 @@ class ValidateInput:
         else:
             raise InvalidLambdaInputException(f'Could not find {QUERY_STRING_PARAMETERS} in Input')
 
-    def extract_headers(self) -> str:
-        if HEADERS in self.event:
-            headers: dict = self.event.get(HEADERS)
-
-            if AUTHORIZATION in headers and headers.get(AUTHORIZATION):
-                return headers.get(AUTHORIZATION)
-            else:
-                raise InvalidLambdaInputException(f'Could not find {AUTHORIZATION} in Input')
+    def extract_user_id_from_input(self) -> str:
+        user_id = self.event.get('requestContext', {}).get('authorizer', {}).get('claims', {}).get('sub')
+        if user_id is None:
+            raise InvalidLambdaInputException("Unable to get user_id from token")
         else:
-            raise InvalidLambdaInputException(f'Could not find {AUTHORIZATION} in Input')
+            return user_id
