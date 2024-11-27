@@ -11,7 +11,9 @@ def lambda_handler(event, context):
     headers = get_response_headers_cors(allow_methods=['DELETE'])
 
     try:
-        comp_id, topic = ValidateInput(event).extract_input()
+        validate_input = ValidateInput(event)
+        comp_id, topic = validate_input.extract_query_string_parameters()
+        authentication: str = validate_input.extract_headers()
         DatabaseService(comp_id, topic, database_table).delete_from_database()
         return Response(StatusCodes.STATUS_OK, headers, f'Question with comp_id {comp_id} deleted').build_response()
     except InvalidLambdaInputException as e:

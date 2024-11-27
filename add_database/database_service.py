@@ -32,5 +32,5 @@ class DatabaseService:
         random_num: int = random.randint(1, 1000)
         return Question(comp_id,input_question.get('topic'), input_question.get('question'),input_question.get('answers'),
                                           input_question.get('explanation'), input_question.get('difficulty'),
-                                          random_num).prepare_for_database()
+                                          random_num, input_question.get('user_id')).prepare_for_database()
 

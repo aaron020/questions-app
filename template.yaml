@@ -204,6 +204,8 @@ Resources:
               responses:
                 '200':
                   description: Successful response from Lambda function
+              security:
+                - CognitoAuthorizer: []
             delete:
               x-amazon-apigateway-integration:
                 type: aws_proxy
@@ -227,6 +229,8 @@ Resources:
           AttributeType: S
         - AttributeName: topic
           AttributeType: S
+        - AttributeName: user_id
+          AttributeType: S
       KeySchema:
         - AttributeName: comp_id
           KeyType: HASH
@@ -240,6 +244,17 @@ Resources:
         - IndexName: TopicIndex
           KeySchema:
             - AttributeName: topic
+              KeyType: HASH
+            - AttributeName: comp_id
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 2
+            WriteCapacityUnits: 2
+        - IndexName: UserIndex
+          KeySchema:
+            - AttributeName: user_id
               KeyType: HASH
             - AttributeName: comp_id
               KeyType: RANGE
