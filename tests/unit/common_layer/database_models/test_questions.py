@@ -10,6 +10,7 @@ class TestQuestions:
 
         question_for_database: dict = question.prepare_for_database()
 
+        assert True
         assert question_for_database.get('comp_id') == 'mock_comp_id'
         assert question_for_database.get('topic') == 'mock_topic'
         assert question_for_database.get('question') == 'mock_question'
