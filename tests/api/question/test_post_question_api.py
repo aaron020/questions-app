@@ -1,6 +1,7 @@
 import pytest
 import requests
 import os
+from dotenv import load_dotenv, dotenv_values
 
 api_url = 'https://jbfutu0890.execute-api.eu-west-1.amazonaws.com/Prod/question'
 auth_url = 'https://cognito-idp.eu-west-1.amazonaws.com/'
@@ -10,7 +11,8 @@ class TestGetQuestion:
     @pytest.fixture
     def get_headers(self):
         try:
-            test_account_pwd = os.environ['TEST_ACCOUNT_PWD']
+            vars = dotenv_values('../../../.env')
+            test_account_pwd = vars['TEST_ACCOUNT_PWD']
         except Exception as e:
             print(e)
         try:
