@@ -3,7 +3,7 @@ import boto3
 from decimal import Decimal
 
 from common_layer.api_requests_helper import get_response_headers_cors, Response, StatusCodes
-from common_layer.exceptions import InvalidLambdaInputException, DatabaseFailedToPutExeception, DatabaseNoContentException
+from common_layer.exceptions import InvalidLambdaInputException, DatabaseNoContentException, DatabaseFailedToQueryExeception
 from database_service import DatabaseService
 from validate_input import ValidateInput
 
@@ -21,7 +21,7 @@ def lambda_handler(event, context):
         return Response(StatusCodes.STATUS_OK, headers, questions).build_response()
     except InvalidLambdaInputException as e:
         return Response(StatusCodes.STATUS_CLIENT_ERROR, headers, str(e)).build_response()
-    except DatabaseFailedToPutExeception as e:
+    except DatabaseFailedToQueryExeception as e:
         return Response(StatusCodes.STATUS_SERVER_ERROR, headers, str(e)).build_response()
     except DatabaseNoContentException as e:
         return Response(StatusCodes.STATUS_NO_CONTENT, headers, str(e)).build_response()
