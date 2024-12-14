@@ -1,7 +1,7 @@
 import pytest
 import requests
 import os
-from dotenv import load_dotenv, dotenv_values
+from dotenv import dotenv_values
 
 api_url = 'https://jbfutu0890.execute-api.eu-west-1.amazonaws.com/Prod/question'
 auth_url = 'https://cognito-idp.eu-west-1.amazonaws.com/'
@@ -56,6 +56,25 @@ class TestGetQuestion:
                 headers=get_headers
             )
             assert response.status_code == 200
+        except requests.exceptions.RequestException as e:
+            print('Error:', e)
+            assert False
+
+    def test_post_question_400(self, get_headers):
+        question_body_invalid = {
+            'answers': [{'4 days default, 10 days max': True}, {'4 days default, 10 days max': False}],
+            'topic': 'test',
+            'explanation': 'Im not really sure',
+            'difficulty': 2
+        }
+
+        try:
+            response = requests.post(
+                url=api_url,
+                json=question_body_invalid,
+                headers=get_headers
+            )
+            assert response.status_code == 400
         except requests.exceptions.RequestException as e:
             print('Error:', e)
             assert False

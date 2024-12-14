@@ -46,7 +46,7 @@ export const QuestionEntry = () => {
 
         console.log(payload);
 
-        fetch('https://n12kvagztk.execute-api.eu-west-1.amazonaws.com/Prod/question', {
+        fetch('https://jbfutu0890.execute-api.eu-west-1.amazonaws.com/Prod/question', {
             method: 'POST',
             headers: {"content-type": "application/json", "x-amz-docs-region": "eu-west-1"},
             mode: 'cors',
@@ -73,12 +73,16 @@ export const QuestionEntry = () => {
         <section className="question" id="question">
             <Container>
                 <Row className="align-items-center">
-                    <h2>Enter your question:</h2>
                     <Col sm={12} className="px-1">
                         <p>Enter the question:</p>
-                        <input type="text" value={formDetails.question} placeholder="Question" onChange={(e) => onFormUpdate('question',e.target.value)}/>
+                        <textarea
+                            value={formDetails.question}
+                            placeholder="Question"
+                            onChange={(e) => onFormUpdate('question', e.target.value)}
+                            className="full-width-textarea"
+                        />
                     </Col>
-                    <Col sm={4} className="px-1">
+                    <Col sm={6} className="px-1">
                         <p>Option 1:</p>
                         <input type="text" value={formDetails.answer_1} placeholder="Answer 1" onChange={(e) => onFormUpdate('answer_1',e.target.value)}/>
                         <div>
@@ -86,7 +90,7 @@ export const QuestionEntry = () => {
                             <label>Correct Answer?</label>
                         </div>
                     </Col>
-                    <Col sm={4} className="px-1">
+                    <Col sm={6} className="px-1">
                         <p>Option 2:</p>
                         <input type="text" value={formDetails.answer_2} placeholder="Answer 2" onChange={(e) => onFormUpdate('answer_2',e.target.value)}/>
                         <div>
@@ -94,7 +98,7 @@ export const QuestionEntry = () => {
                             <label>Correct Answer?</label>
                         </div>
                     </Col>
-                    <Col sm={4} className="px-1">
+                    <Col sm={6} className="px-1">
                         <p>Option 3:</p>
                         <input type="text" value={formDetails.answer_3} placeholder="Answer 3" onChange={(e) => onFormUpdate('answer_3',e.target.value)}/>
                         <div>
@@ -102,9 +106,14 @@ export const QuestionEntry = () => {
                             <label>Correct Answer?</label>
                         </div>
                     </Col>
-                    <Col sm={4} className="px-1">
-                        <p>Please Explain:</p>
-                        <input type="text" value={formDetails.explanation} placeholder="Explanation" onChange={(e) => onFormUpdate('explanation',e.target.value)}/>
+                    <Col sm={12} className="px-1">
+                        <p>Please explain your answer:</p>
+                        <textarea
+                            value={formDetails.explanation}
+                            placeholder="Explanation"
+                            onChange={(e) => onFormUpdate('explanation', e.target.value)}
+                            className="full-width-textarea"
+                        />
                     </Col>
                     <Col sm={12} className="px-1">
                         <p>Difficulty Level:</p>
