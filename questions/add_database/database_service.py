@@ -30,7 +30,7 @@ class DatabaseService:
     def convert_to_database_question(input_question: dict) -> dict:
         comp_id: str =  str(uuid.uuid4())
         random_num: int = random.randint(1, 1000)
-        return Question(comp_id,input_question.get('topic'), input_question.get('question'),input_question.get('answers'),
+        return Question(comp_id,input_question.get('topic'), input_question.get('questions'),input_question.get('answers'),
                                           input_question.get('explanation'), input_question.get('difficulty'),
                                           random_num, input_question.get('user_id')).prepare_for_database()
 

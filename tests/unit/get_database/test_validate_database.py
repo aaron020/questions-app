@@ -1,7 +1,7 @@
 import pytest
 
 from common_layer.exceptions import InvalidLambdaInputException
-from get_database.validate_input import ValidateInput
+from questions.get_database import ValidateInput
 
 
 class TestValidateInput:

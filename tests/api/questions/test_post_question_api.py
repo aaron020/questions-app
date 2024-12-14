@@ -1,9 +1,8 @@
 import pytest
 import requests
-import os
 from dotenv import dotenv_values
 
-api_url = 'https://jbfutu0890.execute-api.eu-west-1.amazonaws.com/Prod/question'
+api_url = 'https://jbfutu0890.execute-api.eu-west-1.amazonaws.com/Prod/topics/questions'
 auth_url = 'https://cognito-idp.eu-west-1.amazonaws.com/'
 
 class TestGetQuestion:

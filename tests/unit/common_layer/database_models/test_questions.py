@@ -13,7 +13,7 @@ class TestQuestions:
         assert True
         assert question_for_database.get('comp_id') == 'mock_comp_id'
         assert question_for_database.get('topic') == 'mock_topic'
-        assert question_for_database.get('question') == 'mock_question'
+        assert question_for_database.get('questions') == 'mock_question'
         assert question_for_database.get('answer_0') == {'mock_answer':False}
         assert question_for_database.get('answer_1') == {'mock_answer':True}
         assert question_for_database.get('explanation') == 'mock_explanation'

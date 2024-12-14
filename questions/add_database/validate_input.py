@@ -31,14 +31,14 @@ class ValidateInput:
 
     @staticmethod
     def _validate(extracted_question: dict) -> None:
-        valid_keys = ['question', 'answers', 'topic', 'explanation', 'difficulty', 'user_id']
+        valid_keys = ['questions', 'answers', 'topic', 'explanation', 'difficulty', 'user_id']
 
         for key in valid_keys:
             if key not in extracted_question or extracted_question.get(key) is None:
-                raise InvalidLambdaInputException(f'question missing the following value: {key}')
+                raise InvalidLambdaInputException(f'questions missing the following value: {key}')
 
         if 0 > extracted_question.get('difficulty') > 3:
-            raise InvalidLambdaInputException(f'question difficulty must be between 1 and 3')
+            raise InvalidLambdaInputException(f'questions difficulty must be between 1 and 3')
 
         if len(extracted_question.get('answers')) > 5:
             raise InvalidLambdaInputException(f'answers cannot be more than 5')

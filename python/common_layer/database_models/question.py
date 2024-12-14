@@ -14,7 +14,7 @@ class Question:
     user_id: Optional[str] = None
 
     def prepare_for_database(self) -> dict:
-        question_for_database = {'comp_id': self.comp_id, 'topic': self.topic, 'question': self.question,
+        question_for_database = {'comp_id': self.comp_id, 'topic': self.topic, 'questions': self.question,
                                  'explanation': self.explanation,
                                  'difficulty': self.difficulty, 'random': self.random, 'user_id': self.user_id}
         for answer_index in range(len(self.answers)):

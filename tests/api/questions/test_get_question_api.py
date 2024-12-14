@@ -1,6 +1,6 @@
 import requests
 
-api_url = 'https://jbfutu0890.execute-api.eu-west-1.amazonaws.com/Prod/question'
+api_url = 'https://jbfutu0890.execute-api.eu-west-1.amazonaws.com/Prod/topics/questions'
 
 class TestGetQuestion:
 
