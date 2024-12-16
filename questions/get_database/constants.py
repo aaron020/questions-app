@@ -1,2 +1,2 @@
 QUERY_STRING_PARAMETERS: str = 'queryStringParameters'
-TOPIC: str = 'topic'
+TOPIC_ID: str = 'topic_id'

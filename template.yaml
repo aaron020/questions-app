@@ -226,14 +226,14 @@ Resources:
       AttributeDefinitions:
         - AttributeName: comp_id
           AttributeType: S
-        - AttributeName: topic
+        - AttributeName: topic_id
           AttributeType: S
         - AttributeName: user_id
           AttributeType: S
       KeySchema:
         - AttributeName: comp_id
           KeyType: HASH
-        - AttributeName: topic
+        - AttributeName: topic_id
           KeyType: RANGE
       BillingMode: PROVISIONED
       ProvisionedThroughput:
@@ -242,7 +242,7 @@ Resources:
       GlobalSecondaryIndexes:
         - IndexName: TopicIndex
           KeySchema:
-            - AttributeName: topic
+            - AttributeName: topic_id
               KeyType: HASH
             - AttributeName: comp_id
               KeyType: RANGE
@@ -262,6 +262,26 @@ Resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 2
             WriteCapacityUnits: 2
+
+  DynamoDBTableTopic:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Delete
+    Properties:
+      TableName: topics
+      AttributeDefinitions:
+        - AttributeName: topic_id
+          AttributeType: S
+        - AttributeName: user_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: topic_id
+          KeyType: HASH
+        - AttributeName: user_id
+          KeyType: RANGE
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
 
   CognitoUserPool:
     Type: AWS::Cognito::UserPool

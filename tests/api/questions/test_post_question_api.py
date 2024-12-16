@@ -2,7 +2,7 @@ import pytest
 import requests
 from dotenv import dotenv_values
 
-api_url = 'https://jbfutu0890.execute-api.eu-west-1.amazonaws.com/Prod/topics/questions'
+api_url = 'https://67xwh4txde.execute-api.eu-west-1.amazonaws.com/Prod/topics/questions'
 auth_url = 'https://cognito-idp.eu-west-1.amazonaws.com/'
 
 class TestGetQuestion:
@@ -26,7 +26,7 @@ class TestGetQuestion:
                     'USERNAME': 'testing_user',
                     'PASSWORD': test_account_pwd
                 },
-                'ClientId': '7mf7maqg1j7l98rouhjlisomvr'
+                'ClientId': '2qd75osk32c1abght222gqp28u'
             }
             response = requests.post(url=auth_url,json=body, headers=headers)
             data = response.json()
