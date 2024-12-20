@@ -17,7 +17,7 @@ class DatabaseService:
         try:
             response: dict = self.database_table.put_item(
                 Item=self.database_question,
-                ConditionExpression='attribute_not_exists(comp_id)'
+                ConditionExpression='attribute_not_exists(question_id)'
             )
             response_code: int = response.get('ResponseMetadata').get('HTTPStatusCode')
             if response_code != 200:

@@ -155,6 +155,32 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
 
+
+
+  TopicAddDatabaseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: topics-add-questions-to-database
+      CodeUri: topics/add_database/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Layers:
+        - !Ref CommonLayer
+      Architectures:
+        - x86_64
+      Role: !GetAtt LambdaExecutionRole.Arn
+  MyApiGatewayLambdaPermissionTopicAddDatabaseFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref TopicAddDatabaseFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
+
+
+
+
+
   CommonLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -179,7 +205,7 @@ Resources:
         openapi: '3.0'
         info: {}
         paths:
-          topics/questions:
+          /{proxy+}:
             options:
               x-amazon-apigateway-integration:
                 type: aws_proxy
@@ -188,6 +214,18 @@ Resources:
               responses:
                 '200':
                   description: Successful response for CORS preflight
+          topics:
+            post:
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${TopicAddDatabaseFunction.Arn}/invocations
+              responses:
+                '200':
+                  description: Successful response from Lambda function
+              security:
+                - CognitoAuthorizer: [ ]
+          topics/questions:
             get:
               x-amazon-apigateway-integration:
                 type: aws_proxy  
