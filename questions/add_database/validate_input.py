@@ -31,7 +31,7 @@ class ValidateInput:
 
     @staticmethod
     def _validate(extracted_question: dict) -> None:
-        valid_keys = ['questions', 'answers', 'topic', 'explanation', 'difficulty', 'user_id']
+        valid_keys = ['questions', 'answers', 'topic_id', 'explanation', 'difficulty', 'user_id']
 
         for key in valid_keys:
             if key not in extracted_question or extracted_question.get(key) is None:

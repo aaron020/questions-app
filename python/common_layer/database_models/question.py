@@ -4,7 +4,7 @@ from typing import List, Optional, Dict
 
 @dataclass
 class Question:
-    comp_id: Optional[str] = None
+    question_id: Optional[str] = None
     topic_id: Optional[str] = None
     question: Optional[str] = None
     answers: Optional[List[Dict[str,bool]]] = field(default_factory=list)
@@ -14,7 +14,7 @@ class Question:
     user_id: Optional[str] = None
 
     def prepare_for_database(self) -> dict:
-        question_for_database = {'comp_id': self.comp_id, 'topic_id': self.topic_id, 'questions': self.question,
+        question_for_database = {'question_id': self.question_id, 'topic_id': self.topic_id, 'questions': self.question,
                                  'explanation': self.explanation,
                                  'difficulty': self.difficulty, 'random': self.random, 'user_id': self.user_id}
         for answer_index in range(len(self.answers)):

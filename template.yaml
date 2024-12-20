@@ -222,16 +222,16 @@ Resources:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Delete
     Properties:
-      TableName: topic_questions
+      TableName: questions
       AttributeDefinitions:
-        - AttributeName: comp_id
+        - AttributeName: question_id
           AttributeType: S
         - AttributeName: topic_id
           AttributeType: S
         - AttributeName: user_id
           AttributeType: S
       KeySchema:
-        - AttributeName: comp_id
+        - AttributeName: question_id
           KeyType: HASH
         - AttributeName: topic_id
           KeyType: RANGE
@@ -244,7 +244,7 @@ Resources:
           KeySchema:
             - AttributeName: topic_id
               KeyType: HASH
-            - AttributeName: comp_id
+            - AttributeName: question_id
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
@@ -255,7 +255,7 @@ Resources:
           KeySchema:
             - AttributeName: user_id
               KeyType: HASH
-            - AttributeName: comp_id
+            - AttributeName: question_id
               KeyType: RANGE
           Projection:
             ProjectionType: ALL

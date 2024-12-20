@@ -3,15 +3,12 @@ import boto3
 from decimal import Decimal
 
 from common_layer.api_requests_helper import get_response_headers_cors, Response, StatusCodes
+from common_layer.database_helper import connect_questions_table
 from common_layer.exceptions import InvalidLambdaInputException, DatabaseNoContentException, DatabaseFailedToQueryExeception
 from database_service import DatabaseService
 from validate_input import ValidateInput
 
-client = boto3.client('dynamodb')
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('topic_questions')
-tableName = 'questions'
-
+table = database_table = connect_questions_table()
 
 def lambda_handler(event, context):
     headers = get_response_headers_cors(allow_methods=['GET'])

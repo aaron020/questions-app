@@ -1,6 +1,6 @@
 QUERY_STRING_PARAMETERS: str = 'queryStringParameters'
-COMP_ID: str = 'comp_id'
-TOPIC: str = 'topic'
+QUESTION_ID: str = 'question_id'
+TOPIC_ID: str = 'topic_id'
 
 HEADERS: str = 'headers'
 AUTHORIZATION: str = 'Authorization'
