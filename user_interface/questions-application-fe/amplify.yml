@@ -19,8 +19,9 @@ applications:
             - pwd                    # Print working directory after build
             - ls -la dist           # List contents of dist directory
             - ls -la dist/questions-application-fe  # List contents of build output
+            - ls -la dist/questions-application-fe/browser
       artifacts:
-        baseDirectory: dist/questions-application-fe
+        baseDirectory: dist/questions-application-fe/browser
         files:
           - '**/*'
       cache:
