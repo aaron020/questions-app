@@ -1,6 +1,7 @@
 version: 1
 applications:
-  - frontend:
+  - appRoot: questions-app/user_interface/questions-application-fe
+    frontend:
       phases:
         preBuild:
           commands:
@@ -9,15 +10,14 @@ applications:
             - nvm install 18.19.0
             - nvm use 18.19.0
             - node -v
-            - cd questions-app/user_interface/questions-application-fe
             - npm install
         build:
           commands:
             - npm run build
       artifacts:
-        baseDirectory: questions-app/user_interface/questions-application-fe/dist/questions-application-fe
+        baseDirectory: dist/questions-application-fe
         files:
           - '**/*'
       cache:
         paths:
-          - questions-app/user_interface/questions-application-fe/node_modules/**/*
+          - node_modules/**/*
