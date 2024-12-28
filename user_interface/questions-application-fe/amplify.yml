@@ -24,6 +24,15 @@ applications:
         baseDirectory: dist/questions-application-fe/browser
         files:
           - '**/*'
+        customHeaders:
+          - pattern: '**/*.js'
+            headers:
+              - key: 'Content-Type'
+                value: 'application/javascript'
+          - pattern: '**/*.mjs'
+            headers:
+              - key: 'Content-Type'
+                value: 'application/javascript'
       cache:
         paths:
           - node_modules/**/*
