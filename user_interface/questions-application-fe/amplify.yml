@@ -15,7 +15,7 @@ applications:
           commands:
             - npm run build
       artifacts:
-        baseDirectory: dist/questions-application-fe
+        baseDirectory: build
         files:
           - '**/*'
       cache:
