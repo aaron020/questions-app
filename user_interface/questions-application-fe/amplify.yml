@@ -10,10 +10,15 @@ applications:
             - nvm install 18.19.0
             - nvm use 18.19.0
             - node -v
+            - pwd                    # Print working directory
+            - ls -la                 # List all files in current directory
             - npm install
         build:
           commands:
             - npm run build
+            - pwd                    # Print working directory after build
+            - ls -la dist           # List contents of dist directory
+            - ls -la dist/questions-application-fe  # List contents of build output
       artifacts:
         baseDirectory: dist/questions-application-fe
         files:
