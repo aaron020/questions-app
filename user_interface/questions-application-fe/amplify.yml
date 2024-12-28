@@ -1,6 +1,6 @@
 version: 1
 applications:
-  - appRoot: user_interface/questions-application-fe
+  - appRoot: questions-app/user_interface/questions-application-fe
     frontend:
       phases:
         preBuild:
@@ -15,7 +15,7 @@ applications:
           commands:
             - npm run build
       artifacts:
-        baseDirectory: build
+        baseDirectory: dist/questions-application-fe
         files:
           - '**/*'
       cache:
