@@ -1,23 +1,22 @@
 version: 1
-applications:
-  - appRoot: questions-app/user_interface/questions-application-fe
-    frontend:
-      phases:
-        preBuild:
-          commands:
-            - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-            - . ~/.nvm/nvm.sh
-            - nvm install 18.19.0
-            - nvm use 18.19.0
-            - node -v
-            - npm install
-        build:
-          commands:
-            - npm run build
-      artifacts:
-        baseDirectory: dist/questions-application-fe
-        files:
-          - '**/*'
-      cache:
-        paths:
-          - node_modules/**/*
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+        - . ~/.nvm/nvm.sh
+        - nvm install 18.19.0
+        - nvm use 18.19.0
+        - node -v
+        - cd questions-app/user_interface/questions-application-fe
+        - npm install
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: questions-app/user_interface/questions-application-fe/dist/questions-application-fe
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - questions-app/user_interface/questions-application-fe/node_modules/**/*
