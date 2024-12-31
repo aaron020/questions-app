@@ -10,29 +10,58 @@ applications:
             - nvm install 18.19.0
             - nvm use 18.19.0
             - node -v
-            - pwd                    # Print working directory
-            - ls -la                 # List all files in current directory
+            - pwd
+            - ls -la
             - npm install
         build:
           commands:
             - npm run build
-            - pwd                    # Print working directory after build
-            - ls -la dist           # List contents of dist directory
-            - ls -la dist/questions-application-fe  # List contents of build output
+            - pwd
+            - ls -la dist
+            - ls -la dist/questions-application-fe
             - ls -la dist/questions-application-fe/browser
       artifacts:
         baseDirectory: dist/questions-application-fe/browser
         files:
           - '**/*'
         customHeaders:
+          # Handle JavaScript modules
           - pattern: '**/*.js'
             headers:
               - key: 'Content-Type'
-                value: 'application/javascript'
+                value: 'application/javascript; charset=utf-8'
           - pattern: '**/*.mjs'
             headers:
               - key: 'Content-Type'
-                value: 'application/javascript'
+                value: 'application/javascript; charset=utf-8'
+          # Handle source maps
+          - pattern: '**/*.js.map'
+            headers:
+              - key: 'Content-Type'
+                value: 'application/json'
+          # Handle static assets
+          - pattern: '**/*.json'
+            headers:
+              - key: 'Content-Type'
+                value: 'application/json'
+          - pattern: '**/*.css'
+            headers:
+              - key: 'Content-Type'
+                value: 'text/css'
+          # Add CORS and caching headers for all files
+          - pattern: '**/*'
+            headers:
+              - key: 'Cache-Control'
+                value: 'max-age=0, no-cache, no-store, must-revalidate'
+              - key: 'Access-Control-Allow-Origin'
+                value: '*'
+          # Special handling for index.html
+          - pattern: 'index.html'
+            headers:
+              - key: 'Cache-Control'
+                value: 'no-cache'
+              - key: 'Content-Type'
+                value: 'text/html; charset=utf-8'
       cache:
         paths:
           - node_modules/**/*
