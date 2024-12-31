@@ -21,42 +21,53 @@ applications:
             - ls -la dist/questions-application-fe
             - ls -la dist/questions-application-fe/browser
       artifacts:
-        baseDirectory: dist/questions-application-fe/browser
+        # Changed to include the parent directory that contains both browser files and routing configuration
+        baseDirectory: dist/questions-application-fe
         files:
           - '**/*'
         customHeaders:
-          # Handle JavaScript modules
-          - pattern: '**/*.js'
+          # JavaScript modules in the browser directory
+          - pattern: 'browser/**/*.js'
             headers:
               - key: 'Content-Type'
                 value: 'application/javascript; charset=utf-8'
-          - pattern: '**/*.mjs'
+          - pattern: 'browser/**/*.mjs'
             headers:
               - key: 'Content-Type'
                 value: 'application/javascript; charset=utf-8'
-          # Handle source maps
-          - pattern: '**/*.js.map'
+          
+          # Source maps in browser directory
+          - pattern: 'browser/**/*.js.map'
             headers:
               - key: 'Content-Type'
                 value: 'application/json'
-          # Handle static assets
-          - pattern: '**/*.json'
+          
+          # Static assets in browser directory
+          - pattern: 'browser/**/*.json'
             headers:
               - key: 'Content-Type'
                 value: 'application/json'
-          - pattern: '**/*.css'
+          - pattern: 'browser/**/*.css'
             headers:
               - key: 'Content-Type'
                 value: 'text/css'
-          # Add CORS and caching headers for all files
+          
+          # Routing configuration at root level
+          - pattern: 'prerendered-routing.json'
+            headers:
+              - key: 'Content-Type'
+                value: 'application/json'
+          
+          # CORS and caching for all files
           - pattern: '**/*'
             headers:
               - key: 'Cache-Control'
                 value: 'max-age=0, no-cache, no-store, must-revalidate'
               - key: 'Access-Control-Allow-Origin'
                 value: '*'
-          # Special handling for index.html
-          - pattern: 'index.html'
+          
+          # Special handling for index.html in browser directory
+          - pattern: 'browser/index.html'
             headers:
               - key: 'Cache-Control'
                 value: 'no-cache'
