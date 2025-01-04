@@ -4,6 +4,7 @@ import { AppComponent } from './app/app.component';
 import { Amplify } from 'aws-amplify';
 import { SsmService } from './app/service/ssm.service';
 import { environment } from './environment';
+import { provideHttpClient } from '@angular/common/http';
 
 Amplify.configure({
   Auth: {
@@ -14,7 +15,16 @@ Amplify.configure({
   }
 })
 
-bootstrapApplication(AppComponent, appConfig)
+// bootstrapApplication(AppComponent, appConfig)
+//   .catch((err) => console.error(err));
+
+bootstrapApplication(AppComponent, {
+  ...appConfig,
+  providers: [
+    ...(appConfig.providers || []),
+    provideHttpClient(), 
+  ],
+})
   .catch((err) => console.error(err));
 
 
