@@ -160,7 +160,7 @@ Resources:
   TopicAddDatabaseFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: topics-add-questions-to-database
+      FunctionName: topics-add-topic-to-database
       CodeUri: topics/add_database/
       Handler: app.lambda_handler
       Runtime: python3.9
@@ -177,9 +177,25 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
 
-
-
-
+  TopicGetAllDatabaseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: topics-get-all-from-database
+      CodeUri: topics/get_all_database/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Layers:
+        - !Ref CommonLayer
+      Architectures:
+        - x86_64
+      Role: !GetAtt LambdaExecutionRole.Arn
+  MyApiGatewayLambdaPermissionTopicGetAllDatabaseFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref TopicGetAllDatabaseFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
 
   CommonLayer:
     Type: AWS::Serverless::LayerVersion
@@ -225,6 +241,14 @@ Resources:
                   description: Successful response from Lambda function
               security:
                 - CognitoAuthorizer: [ ]
+            get:
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${TopicGetAllDatabaseFunction.Arn}/invocations
+              responses:
+                '200':
+                  description: Successful response from Lambda function
           topics/questions:
             get:
               x-amazon-apigateway-integration:

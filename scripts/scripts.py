@@ -2,8 +2,7 @@ import boto3
 from boto3.dynamodb.conditions import Key
 
 # Initialize the DynamoDB resource
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('topic_questions')
+
 
 def try_this():
     # Replace 'desired_topic_value' with the actual value of the topic you want to query
@@ -23,4 +22,17 @@ def try_this():
     print(type(items[0]))
 
 # Call the function to perform the query
-try_this()
+#ry_this()
+
+dynamodb = boto3.resource('dynamodb')
+table_topic = dynamodb.Table('topics')
+
+def try_this_one():
+    scan_params = {'Limit': 2}
+    scan_params['ExclusiveStartKey'] = {'topic_id': '6d3dbbc0-749e-49b3-b1d9-6d0152c205e5', 'user_id': '52a57464-4081-70d9-8438-6215796a3c47'}
+    response = table_topic.scan(**scan_params)
+    print(response)
+
+
+
+try_this_one()

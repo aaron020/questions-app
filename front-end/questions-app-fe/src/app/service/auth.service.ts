@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { signIn, fetchAuthSession } from 'aws-amplify/auth';
+import { signIn, fetchAuthSession, signOut} from 'aws-amplify/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +54,21 @@ export class AuthService {
     }
   }
 
-  private async checkInitialAuthState() {
+  async signOut(): Promise<{ success: boolean; error?: string }> {
+    try {
+      await signOut();
+      this.authenticationSubject.next(false);
+      return { success: true };
+    } catch (error) {
+      console.error('Logout error:', error);
+      return {
+        success: false,
+        error: 'Failed to logout. Please try again.'
+      };
+    }
+  }
+
+  public async checkInitialAuthState() {
     try {
       const session = await fetchAuthSession();
       this.authenticationSubject.next(session.tokens !== undefined);

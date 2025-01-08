@@ -5,7 +5,6 @@ class DatabaseFailedToPutExeception(Exception):
     def __init__(self, message):
         super().__init__(message)
 
-
 class DatabaseFailedToQueryExeception(Exception):
     """Exception thrown when we fail to query database"""
 
@@ -24,4 +23,8 @@ class DatabaseNoContentException(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+class DatabaseFailedToScan(Exception):
+    """Exception thrown when database fails to scan"""
+    def __init__(self, message):
+        super().__init__(message)
 

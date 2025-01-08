@@ -5,6 +5,8 @@ import { Amplify } from 'aws-amplify';
 import { SsmService } from './app/service/ssm.service';
 import { environment } from './environment';
 import { provideHttpClient } from '@angular/common/http';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr, ToastrModule } from 'ngx-toastr';
 
 Amplify.configure({
   Auth: {
@@ -22,7 +24,9 @@ bootstrapApplication(AppComponent, {
   ...appConfig,
   providers: [
     ...(appConfig.providers || []),
-    provideHttpClient(), 
+    provideHttpClient(),
+    provideAnimations(),
+    provideToastr()
   ],
 })
   .catch((err) => console.error(err));

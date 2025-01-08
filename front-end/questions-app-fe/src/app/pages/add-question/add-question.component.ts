@@ -3,6 +3,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AddQuestionService } from '../../service/api/add-question.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-question',
@@ -15,7 +16,7 @@ export class AddQuestionComponent implements OnInit{
   topic = signal<string>('');
   form: FormGroup;
 
-  constructor(private route: ActivatedRoute, private fb: FormBuilder, private addQuestionService: AddQuestionService) {
+  constructor(private route: ActivatedRoute, private fb: FormBuilder, private addQuestionService: AddQuestionService, private toastr: ToastrService) {
     this.form = this.fb.group({
       question: ['', [Validators.required, Validators.max(200)]],
       answer_a: ['', [Validators.required, Validators.max(200)]],
@@ -45,12 +46,19 @@ export class AddQuestionComponent implements OnInit{
       try{
         const request = await this.addQuestionService.addQuestion(this.form.value);
         request.subscribe({
-          next: (response) => console.log('Question created successfully'),
+          next: (response) => {
+            console.log('Question created successfully')
+            this.toastr.success('Question Added', 'Successfully added new question!')
+          },
           error: (error) => console.error('Error creating question:', error)
         });
       }catch (error) {
         console.error('Authentication error:', error);
       }
+    }else{
+      this.toastr.warning('Please ensure all fields are filled out!','Oops!', {
+        closeButton: true
+      })
     }
   }
 

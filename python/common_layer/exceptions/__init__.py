@@ -4,5 +4,5 @@ from .custom_database_exceptions import DatabaseFailedToPutExeception
 from .custom_database_exceptions import DatabaseFailedToQueryExeception
 from .custom_database_exceptions import DatabaseFailedToDeleteExeception
 from .custom_database_exceptions import DatabaseNoContentException
-
+from .custom_database_exceptions import DatabaseFailedToScan
 from .custom_authorization_errors import UnAuthorizedDeleteException

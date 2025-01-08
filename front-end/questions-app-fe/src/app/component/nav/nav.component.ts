@@ -1,15 +1,21 @@
 import { Component, signal } from '@angular/core';
+import { AuthService } from '../../service/auth.service';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common'; 
 
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
 export class NavComponent {
+  constructor(public authService: AuthService,  private router: Router){}
+
   isChecked = signal(false)
   ngOnInit(): void {
+    this.authService.checkInitialAuthState();
     const storedTheme = localStorage.getItem('theme');
     const htmlElement = document.documentElement;
 
@@ -37,6 +43,26 @@ export class NavComponent {
       localStorage.setItem('theme', 'light');
     }
     
+  }
+
+  async handleSignOut(event: MouseEvent){
+    event.preventDefault();
+
+    try{
+      const result = await this.authService.signOut();
+    
+
+
+      if (result.success) {
+        await this.router.navigate(['/']);
+      }else {
+        // Handle any logout errors here
+        console.error('Logout failed:', result.error);
+        // You might want to show a toast notification here
+      }
+    } catch(error){
+      console.log(error)
+    }
   }
 
 }
