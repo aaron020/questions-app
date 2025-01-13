@@ -1,4 +1,4 @@
-import { bootstrapApplication } from '@angular/platform-browser';
+import { bootstrapApplication, provideClientHydration } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import { Amplify } from 'aws-amplify';
@@ -24,6 +24,7 @@ bootstrapApplication(AppComponent, {
   ...appConfig,
   providers: [
     ...(appConfig.providers || []),
+    provideClientHydration(),
     provideHttpClient(),
     provideAnimations(),
     provideToastr()

@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, signal } from '@angular/core';
 import { AuthService } from '../../service/auth.service';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule, isPlatformServer } from '@angular/common'; 
+import { ThemeService } from '../../theme.service';
 
 @Component({
   selector: 'app-nav',
@@ -11,38 +12,22 @@ import { CommonModule } from '@angular/common';
   styleUrl: './nav.component.css'
 })
 export class NavComponent {
-  constructor(public authService: AuthService,  private router: Router){}
+  isServer: boolean;
 
-  isChecked = signal(false)
+  constructor(public authService: AuthService,  private router: Router, private themeService: ThemeService, @Inject(PLATFORM_ID) private platformId: object){
+    this.isServer = isPlatformServer(platformId);
+  }
+
+  isChecked = signal<boolean>(this.themeService.initTheme());
+  
   ngOnInit(): void {
     this.authService.checkInitialAuthState();
-    const storedTheme = localStorage.getItem('theme');
-    const htmlElement = document.documentElement;
-
-
-
-    if (storedTheme === 'dark') {
-      htmlElement.classList.add('dark');
-      this.isChecked.set(true)
-    } else {
-      htmlElement.classList.remove('dark');
-    }
   }
 
   onCheckboxChange(event: Event){
     const isChecked = (event.target as HTMLInputElement).checked;
-    const htmlElement = document.documentElement;
-
-    console.log('Checkbox is now:', isChecked ? 'Checked' : 'Unchecked');
-    // Perform actions based on the checkbox state
-    if (isChecked) {
-      htmlElement.classList.add('dark'); // Enable dark mode
-      localStorage.setItem('theme', 'dark');
-    } else {
-      htmlElement.classList.remove('dark'); // Disable dark mode
-      localStorage.setItem('theme', 'light');
-    }
-    
+    this.themeService.toggleDarkMode(isChecked)
+    this.isChecked.set(isChecked)
   }
 
   async handleSignOut(event: MouseEvent){
