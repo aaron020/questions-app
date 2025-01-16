@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavComponent } from './component/nav/nav.component';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,8 @@ import { NavComponent } from './component/nav/nav.component';
 })
 export class AppComponent {
   title = 'questions-app-ui';
+  
+  ngOnInit(): void {
+    initFlowbite();
+  }
 }
