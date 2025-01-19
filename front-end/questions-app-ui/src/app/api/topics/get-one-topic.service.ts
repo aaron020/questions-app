@@ -1,32 +1,27 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environment';
-import { catchError, Observable, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { catchError, throwError } from 'rxjs';
 
-export interface Topic {
+
+export interface TopicResponse {
   topic_id: string,
   topic_name: string,
   description: string
 }
 
-export interface TopicResponse {
-  topics: Topic[];
-  last_evaluated_key: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
-export class GetAllTopicsService {
-  private apiUrl = `${environment.apiUrl}/topics/all`;
-
+export class GetOneTopicService {
+  private apiUrl = `${environment.apiUrl}/topics`;
 
   constructor(private http: HttpClient) { }
 
-  getTopics(limit: number): Observable<TopicResponse>{
-    const httpParams = new HttpParams().set('limit', limit.toString());
+  getTopic(topic_id: string){
+    const httpParams = new HttpParams().set('topic_id', topic_id);
 
-    return this.http.get<TopicResponse>(this.apiUrl, { params: httpParams })
+    return this.http.get<TopicResponse>(this.apiUrl,  { params: httpParams })
     .pipe(
       catchError(this.handleError)
     );

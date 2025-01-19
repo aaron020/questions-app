@@ -28,10 +28,16 @@ dynamodb = boto3.resource('dynamodb')
 table_topic = dynamodb.Table('topics')
 
 def try_this_one():
-    scan_params = {'Limit': 2}
-    scan_params['ExclusiveStartKey'] = {'topic_id': '6d3dbbc0-749e-49b3-b1d9-6d0152c205e5', 'user_id': '52a57464-4081-70d9-8438-6215796a3c47'}
-    response = table_topic.scan(**scan_params)
+    response = table_topic.query(
+        KeyConditionExpression='topic_id = :pk',
+        ExpressionAttributeValues={
+            ':pk': '9e6ba43f-cd6c-4461-891b-cedfefe3b668'
+        }
+    )
     print(response)
+    print(type(response))
+    print(response['Items'])
+    print(response['Items'][0])
 
 
 

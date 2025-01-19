@@ -13,6 +13,12 @@ export const routes: Routes = [
         loadComponent:() => {
             return import('./pages/signin/signin.component').then((m) => m.SigninComponent)
         } 
-    }
+    },
+    {
+        path: 'topic/:topic',
+        loadComponent:() => {
+            return import('./pages/topic-questions/topic-questions.component').then((m) => m.TopicQuestionsComponent)
+        } 
+    },
 
 ];
