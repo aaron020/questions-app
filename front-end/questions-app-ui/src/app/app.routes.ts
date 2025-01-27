@@ -15,9 +15,27 @@ export const routes: Routes = [
         } 
     },
     {
+        path: 'signup',
+        loadComponent:() => {
+            return import('./pages/signup/signup.component').then((m) => m.SignupComponent)
+        } 
+    },
+    {
         path: 'topic/:topic',
         loadComponent:() => {
             return import('./pages/topic-questions/topic-questions.component').then((m) => m.TopicQuestionsComponent)
+        } 
+    },
+    {
+        path: 'question/add/:topic',
+        loadComponent:() => {
+            return import('./pages/add-question/add-question.component').then((m) => m.AddQuestionComponent)
+        } 
+    },
+    {
+        path: 'topic/modify/:topic',
+        loadComponent:() => {
+            return import('./pages/topic-question-modify/topic-question-modify.component').then((m) => m.TopicQuestionModifyComponent)
         } 
     },
 

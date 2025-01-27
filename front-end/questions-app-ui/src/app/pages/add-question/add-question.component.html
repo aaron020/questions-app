@@ -1,0 +1,152 @@
+<section class="bg-white dark:bg-gray-900">
+    <div class="max-w-5xl px-4 py-8 mx-auto lg:py-16">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Add Question</h2>
+        <div class="sm:col-span-2">
+          <label for="topic" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Topic</label>
+          <input
+              type="text"
+              placeholder="{{ topic() | uppercase}}"
+              class="input p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              disabled />
+        </div>
+        <div class="sm:col-span-2">
+          <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700">
+        </div>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
+                <!-- Start Question Text Box-->
+                <div class="sm:col-span-2">
+                    <label for="question" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Question</label>
+                    <textarea formControlName="question" id="question" rows="8" placeholder="Write your question here..." class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"></textarea>
+                </div>
+                <!-- End Question Text Box-->
+  
+
+
+
+                <div class="sm:col-span-2">
+                  <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700">
+                </div>
+  
+
+
+                <!-- Start Answer A Box-->
+                <div class="sm:col-span-2">
+                    <label for="answer_a" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Answer A</label>
+                    <textarea formControlName="answer_a" id="answer_a" rows="2" placeholder="Write answer A here..." class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"></textarea>
+                </div>
+                <div class="sm:col-span-2">
+                  <label class="inline-flex items-center cursor-pointer">
+                    <input formControlName="answer_a_correct" type="checkbox" value="" class="sr-only peer">
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Correct Answer?</span>
+                  </label>
+                </div>
+                <!-- End Answer A Box-->
+
+
+
+
+                
+                <div class="sm:col-span-2">
+                  <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700">
+                </div>
+
+
+
+  
+                <!-- Start Answer B Box-->
+                <div class="sm:col-span-2">
+                  <label for="answer_b" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Answer B</label>
+                  <textarea formControlName="answer_b" id="answer_b" rows="2" placeholder="Write answer A here..." class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"></textarea>
+                </div>
+                <div class="sm:col-span-2">
+                  <label class="inline-flex items-center cursor-pointer">
+                    <input formControlName="answer_b_correct" type="checkbox" value="" class="sr-only peer">
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Correct Answer?</span>
+                  </label>
+                </div>
+                <!-- End Answer B Box-->
+  
+  
+                <div class="sm:col-span-2">
+                  <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700">
+                </div>
+  
+                <!-- Start Answer C Box-->
+                <div class="sm:col-span-2">
+                  <label for="answer_c" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Answer C</label>
+                  <textarea formControlName="answer_c" id="answer_c" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Write answer A here..."></textarea>
+                </div>
+                <div class="sm:col-span-2">
+                  <label class="inline-flex items-center cursor-pointer">
+                    <input formControlName="answer_c_correct" type="checkbox" value="" class="sr-only peer">
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Correct Answer?</span>
+                  </label>
+                </div>
+                <!-- End Answer C Box-->
+  
+  
+                <div class="sm:col-span-2">
+                  <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700">
+                </div>
+  
+                
+  
+                <!-- Start Answer D Box-->
+                <div class="sm:col-span-2">
+                  <label for="answer_d" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Answer D</label>
+                  <textarea formControlName="answer_d" id="answer_d" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Write answer A here..."></textarea>
+                </div>
+                <div class="sm:col-span-2">
+                  <label class="inline-flex items-center cursor-pointer">
+                    <input formControlName="answer_d_correct" type="checkbox" value="" class="sr-only peer">
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Correct Answer?</span>
+                  </label>
+                </div>
+                <!-- End Answer D Box-->
+  
+                <div class="sm:col-span-2">
+                  <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700">
+                </div>
+  
+  
+                <!-- Start Explnation Box -->
+                <div class="sm:col-span-2">
+                  <label for="explanation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Explnation your answer</label>
+                  <textarea formControlName="explanation" id="explanation" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Write the explnation here..."></textarea>
+                </div>
+                <!-- End Explnation Box -->
+  
+  
+                
+                 <!-- Start Difficulty Dropdown -->
+                <div class="sm:col-span-2">
+                    <label for="difficulty" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Difficulty</label>
+                    <select formControlName="difficulty" id="difficulty" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                        <option selected="defualt">Difficulty</option>
+                        <option value="1">Easy</option>
+                        <option value="2">Medium</option>
+                        <option value="3">Hard</option>
+                    </select>
+                </div>
+                 <!-- End Difficulty Dropdown -->
+            </div>
+  
+            <div class="sm:col-span-2">
+              <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700">
+            </div>
+  
+            <div class="flex items-center space-x-4">
+                <button type="submit" class="text-blue-600 inline-flex items-center hover:text-white border border-blue-600 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-900">
+                    Add Question
+                </button>
+            </div>
+        </form>
+    </div>
+  </section>
+
+
