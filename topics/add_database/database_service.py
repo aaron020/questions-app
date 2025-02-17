@@ -1,5 +1,6 @@
 import uuid
 import random
+from unicodedata import category
 
 from botocore.exceptions import ClientError
 
@@ -13,7 +14,7 @@ class DatabaseService:
         self.database_topic: dict = self.convert_to_database_topic(input_question)
         self.database_table = database_table
 
-    def add_to_database(self):
+    def add_to_database(self) -> dict:
         try:
             response: dict = self.database_table.put_item(
                 Item=self.database_topic,
@@ -22,6 +23,7 @@ class DatabaseService:
             response_code: int = response.get('ResponseMetadata').get('HTTPStatusCode')
             if response_code != 200:
                 raise DatabaseFailedToPutExeception(f'Unable to add to database, response code: {response_code}')
+            return self.database_topic
         except ClientError as e:
             raise DatabaseFailedToPutExeception(f'Unable to add to database, {e}')
 
@@ -32,4 +34,5 @@ class DatabaseService:
         return Topic(topic_id=topic_id,
                      user_id=input_topic.get('user_id'),
                      topic_name=input_topic.get('topic_name'),
-                     description=input_topic.get('description')).prepare_for_database()
+                     description=input_topic.get('description'),
+                     category=input_topic.get('category')).prepare_for_database()

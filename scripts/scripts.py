@@ -40,5 +40,14 @@ def try_this_one():
     print(response['Items'][0])
 
 
+dynamodb = boto3.resource('dynamodb')
+table_topic = dynamodb.Table('questions')
+def try_this_delete():
+    response = table_topic.delete_item(
+        Key={'question_id': '214fc4b2-d49b-425a-8055-5ec967fba9d4', 'topic_id': '123'},
+        ConditionExpression='attribute_exists(question_id)'
+    )
+    return response
 
-try_this_one()
+res = try_this_delete()
+print(res)

@@ -6,6 +6,7 @@ from typing import Optional
 class Topic:
     topic_id: Optional[str] = None
     user_id: Optional[str] = None
+    category: Optional[str] = None
     topic_name: Optional[str] = None
     description: Optional[str] = None
 
@@ -14,7 +15,8 @@ class Topic:
             'topic_id': self.topic_id,
             'user_id': self.user_id,
             'topic_name': self.topic_name,
-            'description': self.description
+            'description': self.description,
+            'category': self.category
         }
 
     @staticmethod

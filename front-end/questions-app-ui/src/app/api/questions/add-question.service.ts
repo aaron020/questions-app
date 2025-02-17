@@ -18,6 +18,7 @@ interface QuestionForm {
 }
 
 interface QuestionPayload {
+  question_id: string;
   topic_id: string;
   questions: string;
   answers: Answer[];
@@ -26,7 +27,8 @@ interface QuestionPayload {
 }
 
 interface Answer {
-  [key: string]: boolean;
+  answer: string,
+  correct: boolean
 }
 
 @Injectable({
@@ -48,25 +50,26 @@ export class AddQuestionService {
     }
   }
   
-  private transformFormData(topic_id: string, formData: QuestionForm): QuestionPayload {
+  private transformFormData(topic_id: string, question_id: string, formData: QuestionForm): QuestionPayload {
     const answers: Answer[] = [
-      { [formData.answer_one]: formData.correctGroup === 'one'  },
-      { [formData.answer_two]: formData.correctGroup === 'two' },
+      { answer: formData.answer_one, correct: (formData.correctGroup === 'one')  },
+      { answer: formData.answer_two, correct: (formData.correctGroup === 'two') },
     ];
 
     if (formData.answer_three !== '') {
-      answers.push({ [formData.answer_three]: formData.correctGroup === 'three' });
+      answers.push({ answer: formData.answer_three, correct: (formData.correctGroup === 'three') });
     }
 
     if (formData.answer_four !== '') {
-      answers.push({ [formData.answer_four]: formData.correctGroup === 'four' });
+      answers.push({ answer: formData.answer_four, correct: (formData.correctGroup === 'four') });
     }
 
     if (formData.answer_five !== '') {
-      answers.push({ [formData.answer_five]: formData.correctGroup === 'five' });
+      answers.push({ answer: formData.answer_five, correct: (formData.correctGroup === 'five') });
     }
-
+    
     return {
+      question_id: question_id,
       topic_id: topic_id,
       questions: formData.question,
       answers,
@@ -77,8 +80,14 @@ export class AddQuestionService {
 
   async addQuestion(formData: QuestionForm, topic_id: string): Promise<Observable<any>>{
     const headers = await this.getAuthHeaders();
-    const payload = this.transformFormData(topic_id,formData);
+    const payload = this.transformFormData(topic_id,'', formData);
     console.log(payload)
     return this.http.post<any>(this.apiUrl, payload, { headers });
+  }
+
+  async updateQuestion(formData: QuestionForm, topic_id: string, question_id: string): Promise<Observable<any>>{
+    const headers = await this.getAuthHeaders();
+    const payload = this.transformFormData(topic_id, question_id, formData);
+    return this.http.patch<any>(this.apiUrl,payload, { headers })
   }
 }

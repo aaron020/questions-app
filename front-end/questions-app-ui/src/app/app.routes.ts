@@ -38,5 +38,11 @@ export const routes: Routes = [
             return import('./pages/topic-question-modify/topic-question-modify.component').then((m) => m.TopicQuestionModifyComponent)
         } 
     },
+    {
+        path: 'topic/test/test_id',
+        loadComponent:() => {
+            return import('./component/topic-test/topic-test.component').then((m) => m.TopicTestComponent)
+        } 
+    },
 
 ];

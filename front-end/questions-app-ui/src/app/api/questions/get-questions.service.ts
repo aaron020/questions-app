@@ -16,7 +16,8 @@ export interface QuestionResponse {
 }
 
 export interface Answer {
-  [key: string]: boolean;
+  answer: string,
+  correct: boolean
 }
 
 @Injectable({

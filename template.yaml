@@ -103,6 +103,26 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
 
+  UpdateDatabaseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+       FunctionName: questions-update-database
+       CodeUri: questions/update_question/
+       Handler: app.lambda_handler
+       Runtime: python3.9
+       Layers:
+         - !Ref CommonLayer
+       Architectures:
+       - x86_64
+       Role: !GetAtt LambdaExecutionRole.Arn
+  MyApiGatewayLambdaPermissionUpdateDatabaseFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref UpdateDatabaseFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
+
   DeleteFromDatabaseFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -126,6 +146,46 @@ Resources:
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !Ref DeleteFromDatabaseFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
+
+  StartTopicTestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: topic-test-start
+      CodeUri: topic_test/start_topic_test/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Layers:
+        - !Ref CommonLayer
+      Architectures:
+        - x86_64
+      Role: !GetAtt LambdaExecutionRole.Arn
+  MyApiGatewayLambdaPermissionStartTopicTestFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref StartTopicTestFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
+
+  ValidateAnswerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: topic-test-validate-answer
+      CodeUri: topic_test/validate_answer/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Layers:
+        - !Ref CommonLayer
+      Architectures:
+        - x86_64
+      Role: !GetAtt LambdaExecutionRole.Arn
+  MyApiGatewayLambdaPermissionValidateAnswerFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref ValidateAnswerFunction
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
 
@@ -155,6 +215,23 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
 
+  PreSignUpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: pre-sign-up
+      CodeUri: utils/pre-sign-up
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Role: !GetAtt LambdaExecutionRole.Arn
+  MyApiGatewayLambdaPermissionPreSignUpFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref PreSignUpFunction
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !Sub arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:*
 
 
   TopicAddDatabaseFunction:
@@ -214,6 +291,26 @@ Resources:
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !Ref TopicGetOneDatabaseFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
+
+  TopicCheckOwner:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: topics-check-owner
+      CodeUri: topics/check_topic_owner/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Layers:
+        - !Ref CommonLayer
+      Architectures:
+        - x86_64
+      Role: !GetAtt LambdaExecutionRole.Arn
+  MyApiGatewayLambdaPermissionTopicCheckOwner:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref TopicCheckOwner
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
 
@@ -278,6 +375,17 @@ Resources:
               responses:
                 '200':
                   description: Successful response from Lambda function
+          topics/auth:
+            get:
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${TopicCheckOwner.Arn}/invocations
+              responses:
+                '200':
+                  description: Successful response from Lambda function
+              security:
+                - CognitoAuthorizer: [ ]
           topics/questions:
             get:
               x-amazon-apigateway-integration:
@@ -287,6 +395,8 @@ Resources:
               responses:
                 '200':
                   description: Successful response from Lambda function
+              security:
+                - CognitoAuthorizer: [ ]
             post:
               x-amazon-apigateway-integration:
                 type: aws_proxy
@@ -307,6 +417,39 @@ Resources:
                   description: Successful response from Lambda function
               security:
                 - CognitoAuthorizer: []
+            patch:
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UpdateDatabaseFunction.Arn}/invocations
+              responses:
+                '200':
+                  description: Successful response from Lambda function
+              security:
+                - CognitoAuthorizer: [ ]
+          topic_test/start:
+            post:
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${StartTopicTestFunction.Arn}/invocations
+              responses:
+                '200':
+                  description: Successful response from Lambda function
+              security:
+                - CognitoAuthorizer: [ ]
+          topic_test/validate/answer:
+            post:
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ValidateAnswerFunction.Arn}/invocations
+              responses:
+                '200':
+                  description: Successful response from Lambda function
+              security:
+                - CognitoAuthorizer: [ ]
+
       EndpointConfiguration: REGIONAL
 
   DynamoDBTable:
@@ -374,10 +517,31 @@ Resources:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
 
+  DynamoDBTableTopicTestv2:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Delete
+    Properties:
+      TableName: topic_test
+      AttributeDefinitions:
+        - AttributeName: topic_test_id
+          AttributeType: S
+        - AttributeName: user_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: topic_test_id
+          KeyType: HASH
+        - AttributeName: user_id
+          KeyType: RANGE
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
       UserPoolName: 'dead-user-pool'
+      AutoVerifiedAttributes: []
       AdminCreateUserConfig:
         AllowAdminCreateUserOnly: false
       UsernameConfiguration:
@@ -396,6 +560,8 @@ Resources:
         RecoveryMechanisms:
           - Name: verified_email
             Priority: 1
+      LambdaConfig:
+        PreSignUp: !GetAtt PreSignUpFunction.Arn
   CognitoUserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:

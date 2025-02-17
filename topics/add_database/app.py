@@ -11,8 +11,8 @@ def lambda_handler(event, context):
 
     try:
         input_topic: dict = ValidateInput(event).extract_and_validate_input()
-        DatabaseService(input_topic, table).add_to_database()
-        return Response(StatusCodes.STATUS_OK, headers, 'Topic added to database').build_response()
+        new_topic = DatabaseService(input_topic, table).add_to_database()
+        return Response(StatusCodes.STATUS_OK, headers, new_topic.get('topic_id')).build_response()
     except InvalidLambdaInputException as e:
         return Response(StatusCodes.STATUS_CLIENT_ERROR, headers, str(e)).build_response()
     except DatabaseFailedToPutExeception as e:

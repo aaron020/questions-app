@@ -2,5 +2,5 @@ from common_layer.api_requests_helper import get_response_headers_cors, StatusCo
 
 
 def lambda_handler(event, context):
-    headers = get_response_headers_cors(allow_methods=['OPTIONS', 'POST', 'GET', 'DELETE'],allow_headers=['*'])
+    headers = get_response_headers_cors(allow_methods=['OPTIONS', 'POST', 'GET', 'DELETE', 'PATCH'],allow_headers=['*'])
     return Response(StatusCodes.STATUS_OK, headers, 'preflight request allowed').build_response()

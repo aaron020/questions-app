@@ -7,34 +7,34 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AddQuestionService } from '../../api/questions/add-question.service';
 import { ToastrService } from 'ngx-toastr';
+import { AddQuestionComponent } from '../../component/add-question/add-question.component';
+import { EditQuestionComponent } from '../../component/edit-question/edit-question.component';
 
 @Component({
   selector: 'app-topic-question-modify',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AddQuestionComponent, EditQuestionComponent],
   templateUrl: './topic-question-modify.component.html',
   styleUrl: './topic-question-modify.component.css'
 })
 export class TopicQuestionModifyComponent implements OnInit {
-  private modal: Modal | undefined;
+  private modalAdd: Modal | undefined;
+  private modalEdit: Modal | undefined;
   questions: QuestionResponse[] = []
   questionNumber = 2
   form: FormGroup;
-  private topic_id = ''
+  topic_id = ''
+  selectedQuestion: QuestionResponse = {
+    topic_id: '',
+    question_id: '',
+    questions: '',
+    answers: [], 
+    explanation: '',
+    difficulty: 0 
+  };
 
   constructor(private route: ActivatedRoute, private questionService: GetQuestionsService, private fb: FormBuilder, 
     private addQuestionService: AddQuestionService, private toastr: ToastrService){
-    // this.form = this.fb.group({
-    //   question: ['', [Validators.required, Validators.max(200)]],
-    //   answer_one: ['', [Validators.required, Validators.max(200)]],
-    //   answer_two: ['', [Validators.required, Validators.max(200)]],
-    //   answer_three: ['', [Validators.max(200)]],
-    //   answer_four: ['', [Validators.max(200)]],
-    //   answer_five: ['', [Validators.max(200)]],
-    //   correctGroup: ['one'],
-    //   explanation: ['', [Validators.required, Validators.max(200)]],
-    //   difficulty: ['defualt', [Validators.required, Validators.pattern('^(?!default$).*$')]]
-    // });
     this.form = this.fb.group({
       question: ['', [Validators.required, Validators.maxLength(200)]],
       answer_one: ['', [Validators.required, Validators.maxLength(200)]],
@@ -67,7 +67,12 @@ export class TopicQuestionModifyComponent implements OnInit {
     const modalElement = document.getElementById('question-modal');
     if (modalElement) {
       const modal = new Modal(modalElement);
-      this.modal = modal;
+      this.modalAdd = modal;
+    }
+    const modalEdit = document.getElementById('edit-modal');
+    if (modalEdit){
+      const modal = new Modal(modalEdit);
+      this.modalEdit = modal;
     }
   }
 
@@ -81,10 +86,21 @@ export class TopicQuestionModifyComponent implements OnInit {
     }
   }
 
-  toggleModal() {
-    if (this.modal) {
-      this.modal.toggle();
+  toggleModalAdd() {
+    if (this.modalAdd) {
+      this.modalAdd.toggle();
     }
+  }
+
+  toggleModalEdit(){
+    if (this.modalEdit){
+      this.modalEdit.toggle();
+    }
+  }
+
+  editSelected(question_id: QuestionResponse){
+    this.selectedQuestion = question_id
+    this.toggleModalEdit()
   }
 
   updateQuestionNumber(event: any){
@@ -104,7 +120,7 @@ export class TopicQuestionModifyComponent implements OnInit {
             console.log('Question created successfully')
             this.toastr.success('Question Added', 'Successfully added new question!')
             this.loadQuestions(this.topic_id)
-            this.toggleModal()
+            this.toggleModalAdd()
           },
           error: (error) => console.error('Error creating question:', error)
         });

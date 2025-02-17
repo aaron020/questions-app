@@ -15,6 +15,6 @@ class DatabaseService:
             raise DatabaseFailedToQueryExeception(f'Unable to query database: {e}')
 
         if len(response['Items']) == 0:
-            return DatabaseNoContentException(f'Found no items for topic_id {topic_id}')
+            raise DatabaseNoContentException(f'Found no items for topic_id {topic_id}')
 
         return response['Items'][0]

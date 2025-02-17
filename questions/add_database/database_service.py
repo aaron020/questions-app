@@ -29,8 +29,17 @@ class DatabaseService:
     @staticmethod
     def convert_to_database_question(input_question: dict) -> dict:
         question_id: str =  str(uuid.uuid4())
+
         random_num: int = random.randint(1, 1000)
-        return Question(question_id,input_question.get('topic_id'), input_question.get('questions'),input_question.get('answers'),
+
+        answers = []
+        for answer in input_question.get('answers'):
+            answers.append({
+                "answer": answer.get('answer'),
+                "correct": answer.get('correct'),
+                "answer_id": str(uuid.uuid4())
+            })
+        return Question(question_id,input_question.get('topic_id'), input_question.get('questions'),answers,
                                           input_question.get('explanation'), input_question.get('difficulty'),
                                           random_num, input_question.get('user_id')).prepare_for_database()
 

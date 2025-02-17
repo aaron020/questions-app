@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { signIn, fetchAuthSession, signOut} from 'aws-amplify/auth';
+import { signIn, fetchAuthSession, signOut, signUp} from 'aws-amplify/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,31 @@ export class AuthService {
 
   constructor() {
     this.checkInitialAuthState();
+  }
+
+  async signUp(email: string, username: string, password: string){
+    try{
+      const result = await signUp({
+        username,
+        password,
+        options:{
+          userAttributes:{
+            email
+          }
+        }
+      })
+
+      if(result.isSignUpComplete){
+        console.log('New user created')
+        return { success: true };
+      }else{
+        console.log(result)
+        return { success: false, error: 'Sign-up failed' };
+      }
+    }catch(error){
+      console.log(error)
+      return { success: false, error: 'Sign-up failed' };
+    }
   }
 
   async signIn(username: string, password: string) {
