@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { signIn, fetchAuthSession, signOut, signUp} from 'aws-amplify/auth';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,17 @@ export class AuthService {
 
   constructor() {
     this.checkInitialAuthState();
+  }
+
+  public async getAuthHeaders(): Promise<HttpHeaders> {
+    try {
+      const session = await fetchAuthSession();
+      const idToken = session.tokens?.idToken?.toString();
+      return new HttpHeaders().set('Authorization', `Bearer ${idToken}`);
+    } catch (error) {
+      console.error('Error getting auth token:', error);
+      throw error;
+    }
   }
 
   async signUp(email: string, username: string, password: string){

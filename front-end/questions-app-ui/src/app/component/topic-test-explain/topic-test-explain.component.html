@@ -1,0 +1,14 @@
+<section class="bg-white antialiased dark:bg-gray-900">
+    <form>
+      <div class="mx-auto grid max-w-screen-xl rounded-lg bg-gray-50 p-4 dark:bg-gray-800 md:p-8 lg:grid-cols-12 lg:gap-4 lg:p-16 xl:gap-8">
+        <div class="me-auto place-self-center lg:col-span-12">
+            <p class="mb-6 text-2xl text-gray-800 dark:text-gray-100" *ngIf="validate_answer.correct">Correct 🙂</p>
+            <p class="mb-6 text-2xl text-gray-800 dark:text-gray-100"  *ngIf="!validate_answer.correct">Incorrect 😢</p>
+            <p class="mb-6 text-gray-800 dark:text-gray-100"><b>The Correct Answer is:</b> {{correctAnswer}}</p>
+            <p class="mb-6 text-gray-800 dark:text-gray-100"><b>Explanation:</b> {{validate_answer.data.explanation}}</p>
+        </div>
+      </div>
+    </form>
+</section>
+  
+  

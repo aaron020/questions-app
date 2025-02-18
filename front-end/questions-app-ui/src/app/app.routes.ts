@@ -39,9 +39,9 @@ export const routes: Routes = [
         } 
     },
     {
-        path: 'topic/test/test_id',
+        path: 'topic/test/:topic',
         loadComponent:() => {
-            return import('./component/topic-test/topic-test.component').then((m) => m.TopicTestComponent)
+            return import('./pages/topic-test/topic-test.component').then((m) => m.TopicTestComponent)
         } 
     },
 

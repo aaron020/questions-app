@@ -1,0 +1,11 @@
+
+<app-topic-test-explain *ngIf="showExplanation"
+[validate_answer]="valid_answer"
+></app-topic-test-explain>
+
+<app-topic-test-question
+[topic_test]="topic_test"
+(submitAnswerEmitter)="validateAnswer($event)"
+(nextQuestionEmitter)="nextQuestion()"
+></app-topic-test-question>
+
