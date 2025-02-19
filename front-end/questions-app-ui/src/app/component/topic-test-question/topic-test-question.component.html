@@ -13,9 +13,10 @@
         </div>
       </div>
       <div class="ml-auto place-self-center lg:col-span-12">
-        <a (click)="submitAnswer()" class="inline-flex items-center justify-center rounded-lg bg-primary-700 px-5 py-3 text-center text-base font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900" *ngIf="selectedAnswer != '' && !nextQuestion">Submit Answer</a>
+        <a (click)="submitAnswer()" class="inline-flex items-center justify-center rounded-lg bg-primary-700 px-5 py-3 text-center text-base font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900" *ngIf="selectedAnswer != '' && !nextQuestion && !finishTest">Submit Answer</a>
         <a (click)="onNextQuestion()" class="inline-flex items-center justify-center rounded-lg bg-primary-700 px-5 py-3 text-center text-base font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900" *ngIf="nextQuestion">Next Question</a>
+        <a (click)="onFinishTest()" class="inline-flex items-center justify-center rounded-lg bg-primary-700 px-5 py-3 text-center text-base font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900" *ngIf="finishTest">Finish Test</a>
       </div>
     </div>
   </form>
-</section>
+</section>  
