@@ -6,12 +6,19 @@ import { catchError, Observable, throwError } from 'rxjs';
 export interface Topic {
   topic_id: string,
   topic_name: string,
-  description: string
+  description: string,
+  category: string
 }
 
 export interface TopicResponse {
   topics: Topic[];
-  last_evaluated_key: string;
+  last_evaluated_key: LastEvaluatedKey;
+  has_more: boolean;
+}
+
+export interface LastEvaluatedKey{
+  topic_id: string,
+  user_id: string
 }
 
 @Injectable({
@@ -23,8 +30,13 @@ export class GetAllTopicsService {
 
   constructor(private http: HttpClient) { }
 
-  getTopics(limit: number): Observable<TopicResponse>{
-    const httpParams = new HttpParams().set('limit', limit.toString());
+  getTopics(limit: number, topic_id: string, user_id: string, has_more: boolean): Observable<TopicResponse>{
+    let httpParams = new HttpParams().set('limit', limit.toString());
+    
+    if (has_more){
+      httpParams = httpParams.set('topic_id', topic_id);
+      httpParams = httpParams.set('user_id', user_id);
+    }
 
     return this.http.get<TopicResponse>(this.apiUrl, { params: httpParams })
     .pipe(

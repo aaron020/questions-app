@@ -3,7 +3,10 @@
 <nav class="bg-white border-gray-200 dark:bg-gray-900" *ngIf="!isServer">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-        <img src="../../../assets/app-logo.svg" class="h-8" alt="TopicTest Logo" />
+        <div class="relative h-8 w-8">
+          <img src="https://topic-icon-bucket-azpk1143.s3.eu-west-1.amazonaws.com/light/topic_test.png" class="absolute h-8 dark:hidden" alt="TopicTest Logo" />
+          <img src="https://topic-icon-bucket-azpk1143.s3.eu-west-1.amazonaws.com/dark/topic_test.png" class="absolute h-8 hidden dark:block" alt="TopicTest Logo" />
+        </div>
         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">TopicTest</span>
     </a>
     <div class="flex md:order-2">

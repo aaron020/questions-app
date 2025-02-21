@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { GetAllTopicsService, Topic, TopicResponse } from '../../api/topics/get-all-topics.service';
+import { GetAllTopicsService, LastEvaluatedKey, Topic, TopicResponse } from '../../api/topics/get-all-topics.service';
 import { CommonModule } from '@angular/common';
 import { AddTopicComponent } from '../../component/add-topic/add-topic.component';
 import { Modal } from 'flowbite';
@@ -17,7 +17,8 @@ export class TopicsComponent {
   private modalAdd: Modal | undefined;
 
   topics: Topic[] = [];
-  lastEvaluatedKey: string = '';
+  lastEvaluatedKey: LastEvaluatedKey = {topic_id: '', user_id: ''};
+  has_more: boolean = false
 
   constructor(private topicService: GetAllTopicsService, public authService: AuthService){}
 
@@ -37,10 +38,11 @@ export class TopicsComponent {
   }
 
   loadTopics(){
-    this.topicService.getTopics(20).subscribe({
+    this.topicService.getTopics(16, this.lastEvaluatedKey.topic_id, this.lastEvaluatedKey.user_id, this.has_more).subscribe({
       next: (response: TopicResponse) => {
-        this.topics = response.topics;
+        this.topics = [...this.topics, ...response.topics];
         this.lastEvaluatedKey = response.last_evaluated_key;
+        this.has_more = response.has_more;
         this.loading = false
       },
       error: (error) => {
@@ -48,5 +50,6 @@ export class TopicsComponent {
       }
     })
   }
+
 
 }

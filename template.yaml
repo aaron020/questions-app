@@ -189,6 +189,26 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
 
+  TopicTestResultFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: topic-test-result
+      CodeUri: topic_test/topic_test_result/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Layers:
+        - !Ref CommonLayer
+      Architectures:
+        - x86_64
+      Role: !GetAtt LambdaExecutionRole.Arn
+  MyApiGatewayLambdaPermissionTopicTestResultFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref TopicTestResultFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${QuestionsGateway}/*/*/*
+
   OptionsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -449,7 +469,17 @@ Resources:
                   description: Successful response from Lambda function
               security:
                 - CognitoAuthorizer: [ ]
-
+          topic_test/result:
+            get:
+              x-amazon-apigateway-integration:
+                type: aws_proxy
+                httpMethod: POST
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${TopicTestResultFunction.Arn}/invocations
+              responses:
+                '200':
+                  description: Successful response from Lambda function
+              security:
+                - CognitoAuthorizer: [ ]
       EndpointConfiguration: REGIONAL
 
   DynamoDBTable:
@@ -578,6 +608,30 @@ Resources:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_PASSWORD_AUTH
       PreventUserExistenceErrors: ENABLED
+
+  PublicBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      BucketName: 'topic-icon-bucket-azpk1143'
+      VersioningConfiguration:
+        Status: Enabled
+  PublicBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref PublicBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub '${PublicBucket.Arn}/*'
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group

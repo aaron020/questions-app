@@ -20,5 +20,8 @@ class DatabaseService:
         if not items:
             raise DatabaseNoContentException('Found no items from database')
 
-        return {'topics':items, 'last_evaluated_key':new_last_evaluated_key}
+        if new_last_evaluated_key is not None:
+            return {'topics':items, 'last_evaluated_key':new_last_evaluated_key, 'has_more': True}
+        else:
+            return {'topics':items, 'last_evaluated_key':new_last_evaluated_key, 'has_more': False}
 

@@ -11,6 +11,11 @@ def connect_topics_table():
     table = dynamodb.Table('topics')
     return table
 
+def connect_topic_test_table():
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('topic_test')
+    return table
+
 def connect_any_table():
     dynamodb = boto3.resource('dynamodb')
     return dynamodb

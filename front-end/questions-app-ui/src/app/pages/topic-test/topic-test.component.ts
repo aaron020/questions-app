@@ -51,6 +51,7 @@ export class TopicTestComponent implements OnInit {
       }
     }catch (error) {
       console.error('Error:', error);
+      
     }
   }
 

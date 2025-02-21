@@ -1,3 +1,5 @@
+import json
+
 from common_layer.exceptions import InvalidLambdaInputException
 
 QUERY_STRING_PARAMETERS: str = 'queryStringParameters'
@@ -22,3 +24,13 @@ class InputValidator:
                 raise InvalidLambdaInputException(f'Could not find {param_key} in Input')
         else:
             raise InvalidLambdaInputException(f'Could not find {QUERY_STRING_PARAMETERS} in Input')
+
+    @staticmethod
+    def extract_body_from_input(event: dict) -> dict:
+        if 'body' in event:
+            try:
+                return json.loads(event.get('body'))
+            except Exception as e:
+                raise InvalidLambdaInputException(f'unable to convert body to dict: {e}')
+        else:
+            raise InvalidLambdaInputException('body not present in event')

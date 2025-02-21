@@ -7,6 +7,7 @@ import { catchError, throwError } from 'rxjs';
 export interface TopicResponse {
   topic_id: string,
   topic_name: string,
+  category: string,
   description: string
 }
 

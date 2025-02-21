@@ -17,7 +17,7 @@ export class TopicQuestionsComponent implements OnInit {
   is_topic_owner = false
   loading = true;
   private modalAdd: Modal | undefined;
-  topic: TopicResponse = {'topic_id':'','topic_name':'','description':''}
+  topic: TopicResponse = {'topic_id':'','topic_name':'','description':'', 'category': ''}
 
   constructor(private topicService: GetOneTopicService, private route: ActivatedRoute, private topicAuth: AuthTopicService){}
 
