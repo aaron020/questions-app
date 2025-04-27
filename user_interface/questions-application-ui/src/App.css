@@ -1,7 +1,0 @@
-.full-width-textarea {
-  width: 100%; /* Ensures it spans the full width of the column */
-  height: 100px; /* Set an appropriate height; adjust as needed */
-  box-sizing: border-box; /* Ensures padding doesn't affect dimensions */
-  padding: 8px; /* Adds padding inside the textarea */
-  resize: none; /* Prevents resizing (optional) */
-}
