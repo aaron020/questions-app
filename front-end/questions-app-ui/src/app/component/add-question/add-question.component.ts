@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AddQuestionService } from '../../api/questions/add-question.service';
 import { ToastrService } from 'ngx-toastr';
@@ -16,6 +16,7 @@ export class AddQuestionComponent {
   form: FormGroup;
   private modal: Modal | undefined;
   questionNumber = 2
+  select: HTMLElement|null = null;
   @Input() topic_id: string = '';
 
   @Output() toggleModalOutput = new EventEmitter<any>();
@@ -32,7 +33,8 @@ export class AddQuestionComponent {
       answer_five: [''],
       correctGroup: ['one'],
       explanation: ['', [Validators.required, Validators.maxLength(200)]],
-      difficulty: ['1']
+      difficulty: ['1'],
+      question_amount: ['2']
     });
   }
 
@@ -63,7 +65,8 @@ export class AddQuestionComponent {
       answer_five: '',
       correctGroup: 'one',
       explanation: '',
-      difficulty: '1'
+      difficulty: '1',
+      question_amount: '2'
     })
   }
 
